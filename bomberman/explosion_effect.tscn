@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://b2utboqio7l78"]
+
+[ext_resource type="Script" uid="uid://bilwg84lesee1" path="res://explosion_effect.gd" id="1_4i723"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tcegh"]
+
+[sub_resource type="Curve" id="Curve_4i723"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nejuc"]
+curve = SubResource("Curve_4i723")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4i723"]
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.3, 0.3)
+spread = 180.0
+scale_curve = SubResource("CurveTexture_nejuc")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nejuc"]
+albedo_color = Color(0.521005, 0.60156065, 0.5433488, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_wupqs"]
+material = SubResource("StandardMaterial3D_nejuc")
+
+[node name="ExplosionEffect" type="Area3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("1_4i723")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_tcegh")
+
+[node name="DisplayTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 30
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_4i723")
+draw_pass_1 = SubResource("SphereMesh_wupqs")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="DisplayTimer" to="." method="_on_display_timer_timeout"]

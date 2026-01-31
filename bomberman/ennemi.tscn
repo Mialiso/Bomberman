@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://24bykm01htbd"]
+
+[ext_resource type="Script" uid="uid://2x21c27ssova" path="res://ennemi.gd" id="1_5npyw"]
+[ext_resource type="PackedScene" uid="uid://ciod7v08me33" path="res://assets/dave_the_octopus_no_rig.glb" id="1_m0ij1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5npyw"]
+radius = 0.5854492
+height = 1.5531006
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qswgi"]
+radius = 0.47216797
+height = 1.5196533
+
+[node name="Ennemi" type="CharacterBody3D" groups=["ennemis"]]
+script = ExtResource("1_5npyw")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_m0ij1")]
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -0.6)
+debug_shape_custom_color = Color(0.5647059, 0, 0, 1)
+
+[node name="DetecteurJoueur" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetecteurJoueur"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.012176514, 0.23309326, -0.053813934)
+shape = SubResource("CapsuleShape3D_5npyw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.012234688, 0.2349987, -0.05853176)
+shape = SubResource("CapsuleShape3D_qswgi")
+
+[connection signal="body_entered" from="DetecteurJoueur" to="." method="_on_detecteur_joueur_body_entered"]
+
+[editable path="Sketchfab_Scene"]
